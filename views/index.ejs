@@ -22,9 +22,12 @@
 
   <!-- ====================================================== HERO -->
   <header class="hero">
+    <canvas id="heroCanvas" aria-hidden="true"></canvas>
+    <div class="aurora" aria-hidden="true"><span></span><span></span><span></span></div>
+
     <div class="hero-inner" data-animate>
       <p class="hero-eyebrow">Autonomous Web Design</p>
-      <h1>Your website is your hardest&#8209;working employee.<br><span class="accent">Does yours work nights?</span></h1>
+      <h1>Your website is your hardest&#8209;working employee.<br><span class="accent" id="scrambleText">Does yours work nights?</span></h1>
       <p class="hero-sub">
         Trendzation designs, builds and delivers premium websites for small businesses —
         autonomously, around the clock. While your competitors sleep, we're already building.
@@ -35,6 +38,9 @@
       </div>
       <p class="hero-tagline">We work while you sleep.</p>
     </div>
+    <a href="#problem" class="hero-scroll" aria-label="Scroll down">
+      <span></span><span></span><span></span>
+    </a>
   </header>
 
   <!-- ====================================================== PROBLEM -->
@@ -48,17 +54,17 @@
       </p>
       <div class="card-grid three">
         <div class="card">
-          <div class="card-stat">75%</div>
+          <div class="card-stat" data-count="75" data-suffix="%">75%</div>
           <h3>Judge you by your website</h3>
           <p>Three in four customers judge a business's credibility on its website design alone.</p>
         </div>
         <div class="card">
-          <div class="card-stat">88%</div>
+          <div class="card-stat" data-count="88" data-suffix="%">88%</div>
           <h3>Don't come back</h3>
           <p>Nearly nine in ten visitors won't return to a site after a bad experience. One chance is all you get.</p>
         </div>
         <div class="card">
-          <div class="card-stat">0.05s</div>
+          <div class="card-stat" data-count="0.05" data-decimals="2" data-suffix="s">0.05s</div>
           <h3>To make an impression</h3>
           <p>Visitors form an opinion about your business in a fraction of a second. Outdated design costs you instantly.</p>
         </div>
@@ -322,5 +328,6 @@
   <%- include('partials/footer') %>
 
   <script src="/js/main.js"></script>
+  <script src="/js/effects.js"></script>
 </body>
 </html>

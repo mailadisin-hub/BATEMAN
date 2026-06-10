@@ -8,17 +8,20 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
+    @property --angle { syntax: '<angle>'; initial-value: 0deg; inherits: false; }
+
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
       --bg-deep:    #0a0e1a;
-      --bg-raised:  #121829;
+      --bg-raised:  #0f1524;
       --border:     #243049;
       --text:       #e6eaf2;
       --text-muted: #8a93a8;
       --accent:     #6b8cce;
       --silver:     #c4ccd8;
       --success:    #5fb389;
+      --error:      #e85959;
     }
 
     html, body {
@@ -29,155 +32,166 @@
     }
 
     body {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      min-height: 100vh;
-      padding: 1.5rem;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      min-height: 100vh; padding: 1.5rem;
+      overflow: hidden;
     }
 
-    /* Background grid */
+    /* Aurora blobs */
+    .aurora { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+    .aurora span { position: absolute; border-radius: 50%; filter: blur(90px); }
+    .aurora span:nth-child(1) {
+      width: 500px; height: 500px;
+      background: radial-gradient(circle, rgba(107,140,206,.16) 0%, transparent 70%);
+      top: -140px; left: -120px;
+      animation: o1 80s ease-in-out infinite;
+    }
+    .aurora span:nth-child(2) {
+      width: 380px; height: 380px;
+      background: radial-gradient(circle, rgba(74,63,143,.13) 0%, transparent 70%);
+      bottom: -80px; right: -60px;
+      animation: o2 95s ease-in-out infinite;
+    }
+    @keyframes o1 { 0%,100%{transform:translate(0,0) scale(1)} 50%{transform:translate(50px,-40px) scale(1.1)} }
+    @keyframes o2 { 0%,100%{transform:translate(0,0) scale(1)} 50%{transform:translate(-40px,30px) scale(1.08)} }
+
+    /* Grid overlay */
     body::before {
       content: '';
-      position: fixed;
-      inset: 0;
+      position: fixed; inset: 0; z-index: 0;
       background-image:
-        linear-gradient(rgba(107, 140, 206, 0.03) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(107, 140, 206, 0.03) 1px, transparent 1px);
+        linear-gradient(rgba(107,140,206,.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(107,140,206,.03) 1px, transparent 1px);
       background-size: 48px 48px;
+      mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black, transparent);
+      -webkit-mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black, transparent);
       pointer-events: none;
-      z-index: 0;
     }
 
+    /* Card with animated gradient border */
     .login-card {
-      position: relative;
-      z-index: 1;
-      width: 100%;
-      max-width: 420px;
-      background: var(--bg-raised);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 2.5rem 2rem;
+      position: relative; z-index: 1;
+      width: 100%; max-width: 420px;
+      background: var(--bg-raised) padding-box,
+                  conic-gradient(from var(--angle), rgba(107,140,206,.6), rgba(196,204,216,.3), rgba(107,140,206,.1), rgba(107,140,206,.6)) border-box;
+      border: 1px solid transparent;
+      border-radius: 16px;
+      padding: 2.6rem 2rem 2.2rem;
+      box-shadow: 0 0 80px rgba(0,0,0,.6), 0 0 30px rgba(107,140,206,.08);
+      animation: spin-card 6s linear infinite;
+    }
+    @keyframes spin-card { to { --angle: 360deg; } }
+
+    @supports not (background: conic-gradient(from 0deg, #000, #000)) {
+      .login-card { border-color: var(--border); }
     }
 
-    .login-logo {
-      text-align: center;
-      margin-bottom: 0.5rem;
-    }
+    .login-logo { text-align: center; margin-bottom: .5rem; }
 
     .login-logo .wordmark {
-      font-size: 1.75rem;
-      font-weight: 800;
-      letter-spacing: 0.18em;
-      color: var(--text);
+      font-size: 1.75rem; font-weight: 800; letter-spacing: .18em;
+      background: linear-gradient(120deg, var(--silver) 0%, var(--text) 50%, var(--silver) 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
     }
 
-    .login-logo .wordmark span {
-      color: var(--accent);
-    }
+    .login-logo .wordmark span { -webkit-text-fill-color: transparent; color: var(--accent); }
 
     .login-subtitle {
-      text-align: center;
-      color: var(--text-muted);
-      font-size: 0.8rem;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      margin-bottom: 2rem;
+      text-align: center; color: var(--text-muted);
+      font-size: .75rem; letter-spacing: .14em;
+      text-transform: uppercase; margin-bottom: 2rem;
+      display: flex; align-items: center; justify-content: center; gap: .5rem;
+    }
+
+    /* Pulsing dot next to "Command Centre" */
+    .login-subtitle::before {
+      content: '';
+      display: inline-block; width: 6px; height: 6px;
+      border-radius: 50%; background: var(--accent);
+      box-shadow: 0 0 8px var(--accent);
+      animation: dot-pulse 2s ease-in-out infinite;
+    }
+    @keyframes dot-pulse {
+      0%,100% { opacity: 1; box-shadow: 0 0 8px var(--accent); }
+      50%      { opacity: .5; box-shadow: 0 0 16px var(--accent), 0 0 28px rgba(107,140,206,.4); }
     }
 
     .error-banner {
-      background: rgba(220, 80, 80, 0.12);
-      border: 1px solid rgba(220, 80, 80, 0.3);
-      border-radius: 6px;
-      color: #e07070;
-      font-size: 0.85rem;
-      padding: 0.75rem 1rem;
-      margin-bottom: 1.5rem;
-      text-align: center;
+      background: rgba(220,80,80,.1);
+      border: 1px solid rgba(220,80,80,.28);
+      border-radius: 8px; color: #e07070;
+      font-size: .85rem; padding: .75rem 1rem;
+      margin-bottom: 1.5rem; text-align: center;
     }
 
-    .form-group {
-      margin-bottom: 1.25rem;
-    }
+    .form-group { margin-bottom: 1.25rem; }
 
     label {
-      display: block;
-      font-size: 0.78rem;
-      font-weight: 500;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      color: var(--text-muted);
-      margin-bottom: 0.5rem;
+      display: block; font-size: .72rem; font-weight: 500;
+      letter-spacing: .06em; text-transform: uppercase;
+      color: var(--text-muted); margin-bottom: .5rem;
     }
 
     input[type="email"],
     input[type="password"] {
       width: 100%;
-      background: var(--bg-deep);
+      background: rgba(10,14,26,.7);
       border: 1px solid var(--border);
-      border-radius: 6px;
-      color: var(--text);
-      font-family: inherit;
-      font-size: 0.95rem;
-      padding: 0.7rem 0.9rem;
-      outline: none;
-      transition: border-color 0.2s;
+      border-radius: 8px; color: var(--text);
+      font-family: inherit; font-size: .95rem;
+      padding: .75rem .95rem; outline: none;
+      transition: border-color .2s, box-shadow .2s;
+      backdrop-filter: blur(4px);
     }
-
     input[type="email"]:focus,
     input[type="password"]:focus {
       border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(107,140,206,.15), 0 0 14px rgba(107,140,206,.1);
     }
-
-    input::placeholder {
-      color: var(--text-muted);
-    }
+    input::placeholder { color: rgba(138,147,168,.55); }
 
     .btn-primary {
-      width: 100%;
-      background: var(--accent);
-      border: none;
-      border-radius: 6px;
-      color: #fff;
-      cursor: pointer;
-      font-family: inherit;
-      font-size: 0.95rem;
-      font-weight: 600;
-      letter-spacing: 0.04em;
-      padding: 0.8rem;
-      margin-top: 0.5rem;
-      transition: background 0.2s, opacity 0.2s;
+      width: 100%; position: relative; overflow: hidden;
+      background: linear-gradient(135deg, var(--accent) 0%, #5478b8 100%);
+      border: none; border-radius: 8px;
+      color: #fff; cursor: pointer;
+      font-family: inherit; font-size: .95rem; font-weight: 600;
+      letter-spacing: .04em; padding: .85rem;
+      margin-top: .5rem;
+      transition: box-shadow .25s, transform .15s;
     }
-
-    .btn-primary:hover {
-      background: #7e9fd4;
+    .btn-primary::after {
+      content: '';
+      position: absolute; top: 0; left: -75%; width: 50%; height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,.15), transparent);
+      transform: skewX(-18deg);
+      transition: left .5s;
     }
+    .btn-primary:hover { box-shadow: 0 0 28px rgba(107,140,206,.45); transform: translateY(-1px); }
+    .btn-primary:hover::after { left: 140%; }
 
     .login-back {
-      text-align: center;
-      margin-top: 1.75rem;
-      font-size: 0.82rem;
-      color: var(--text-muted);
+      text-align: center; margin-top: 1.75rem;
+      font-size: .82rem; color: var(--text-muted);
     }
-
-    .login-back a {
-      color: var(--accent);
-      text-decoration: none;
-    }
-
-    .login-back a:hover {
-      text-decoration: underline;
-    }
+    .login-back a { color: var(--accent); text-decoration: none; }
+    .login-back a:hover { text-decoration: underline; }
 
     .divider {
-      border: none;
-      border-top: 1px solid var(--border);
-      margin: 1.75rem 0;
+      border: none; border-top: 1px solid rgba(36,48,73,.8); margin: 1.75rem 0;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation: none !important; transition: none !important; }
+      .login-card { border-color: var(--border); }
     }
   </style>
 </head>
 <body>
+  <div class="aurora" aria-hidden="true"><span></span><span></span></div>
+
   <div class="login-card">
     <div class="login-logo">
       <div class="wordmark">BAT<span>E</span>MAN</div>
@@ -193,36 +207,19 @@
 
       <div class="form-group">
         <label for="email">Email Address</label>
-        <input
-          type="email"
-          id="email"
-          name="email"
-          placeholder="you@example.com"
-          required
-          autocomplete="username"
-        >
+        <input type="email" id="email" name="email" placeholder="you@example.com" required autocomplete="username">
       </div>
 
       <div class="form-group">
         <label for="password">Password</label>
-        <input
-          type="password"
-          id="password"
-          name="password"
-          placeholder="••••••••"
-          required
-          autocomplete="current-password"
-        >
+        <input type="password" id="password" name="password" placeholder="••••••••" required autocomplete="current-password">
       </div>
 
       <button type="submit" class="btn-primary">Sign In</button>
     </form>
 
     <hr class="divider">
-
-    <div class="login-back">
-      <a href="/">&larr; Back to Trendzation</a>
-    </div>
+    <div class="login-back"><a href="/">&larr; Back to Trendzation</a></div>
   </div>
 </body>
 </html>

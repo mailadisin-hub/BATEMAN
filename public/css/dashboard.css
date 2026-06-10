@@ -977,6 +977,120 @@ code {
 @keyframes spin { to { transform: rotate(360deg); } }
 
 /* ==========================================================================
+   Premium visual upgrades (v2)
+   ========================================================================== */
+
+/* Sidebar logo — gradient text */
+.sidebar-logo {
+  background: linear-gradient(120deg, var(--silver) 0%, var(--text) 60%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Active nav link — glowing left bar */
+.nav-link.active {
+  border-left: 2px solid var(--accent);
+  background: rgba(107,140,206,.14);
+  box-shadow: inset 3px 0 12px rgba(107,140,206,.1);
+  color: var(--text);
+}
+
+/* Metric cards — gradient text value, glowing left border, hover lift */
+.metric-card {
+  background: linear-gradient(135deg, rgba(18,24,41,1) 0%, rgba(15,21,36,.8) 100%);
+  border-left: 3px solid var(--accent);
+  box-shadow: 0 0 0 rgba(107,140,206,0);
+  transition: transform .25s, box-shadow .25s;
+}
+.metric-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 32px rgba(0,0,0,.5), 0 0 18px rgba(107,140,206,.18);
+}
+.metric-value {
+  background: linear-gradient(120deg, var(--text) 0%, var(--silver) 100%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Panels — slightly glassier */
+.panel {
+  background: linear-gradient(135deg, rgba(18,24,41,1) 0%, rgba(15,21,36,.9) 100%);
+  backdrop-filter: blur(4px);
+}
+
+/* Status dot — pulsing online ring */
+.status-dot.online {
+  animation: dot-ring 2.2s ease-in-out infinite;
+}
+@keyframes dot-ring {
+  0%,100% { box-shadow: 0 0 6px rgba(95,179,137,.6); }
+  50%      { box-shadow: 0 0 0 5px rgba(95,179,137,.0), 0 0 14px rgba(95,179,137,.7); }
+}
+
+/* Chat send button glow on hover */
+.chat-send:hover {
+  background: var(--accent-bright);
+  box-shadow: 0 0 16px rgba(107,140,206,.5);
+}
+
+/* Chat input bar glow on focus */
+.chat-input-bar:focus-within {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(107,140,206,.1);
+}
+
+/* Chat user bubble — gradient */
+.chat-message.user {
+  background: linear-gradient(135deg, var(--accent) 0%, #5478b8 100%);
+}
+
+/* Toasts — glow */
+.toast {
+  box-shadow: 0 8px 28px rgba(0,0,0,.55), 0 0 12px rgba(107,140,206,.06);
+}
+.toast.success { box-shadow: 0 8px 28px rgba(0,0,0,.55), 0 0 12px rgba(95,179,137,.1); }
+.toast.error   { box-shadow: 0 8px 28px rgba(0,0,0,.55), 0 0 12px rgba(232,89,89,.1); }
+
+/* Tables — subtle row hover glow */
+.data-table tbody tr:hover {
+  background: rgba(107,140,206,.05);
+  outline: 1px solid rgba(107,140,206,.07);
+}
+
+/* Modal — glassy backdrop + glowing border */
+.modal {
+  background: linear-gradient(135deg, rgba(18,24,41,1) 0%, rgba(12,17,30,1) 100%);
+  border-color: rgba(107,140,206,.25);
+  box-shadow: 0 24px 80px rgba(0,0,0,.7), 0 0 40px rgba(107,140,206,.07);
+}
+
+/* Buttons in dashboard */
+.btn-primary {
+  background: linear-gradient(135deg, var(--accent) 0%, #5478b8 100%);
+  position: relative; overflow: hidden;
+}
+.btn-primary::after {
+  content: '';
+  position: absolute; top: 0; left: -75%; width: 50%; height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,.12), transparent);
+  transform: skewX(-18deg); transition: left .5s; pointer-events: none;
+}
+.btn-primary:hover { box-shadow: 0 0 22px rgba(107,140,206,.4); }
+.btn-primary:hover::after { left: 140%; }
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: var(--bg-deep); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+* { scrollbar-width: thin; scrollbar-color: var(--border) var(--bg-deep); }
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .status-dot.online, .metric-card, .chat-send { animation: none !important; transition: none !important; }
+}
+
+/* ==========================================================================
    Responsive
    ========================================================================== */
 

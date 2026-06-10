@@ -36,15 +36,23 @@
         entries.forEach(function (entry) {
           if (entry.isIntersecting) {
             entry.target.classList.add('visible');
+            // Cascade .visible to direct children that need stagger
+            entry.target.querySelectorAll('.card, .step, .pricing-card').forEach(function (child) {
+              // Tiny delay so CSS nth-child delays have time to apply
+              requestAnimationFrame(function () { child.classList.add('visible'); });
+            });
             observer.unobserve(entry.target);
           }
         });
       },
-      { threshold: 0.12 }
+      { threshold: 0.08 }
     );
     animated.forEach(function (el) { observer.observe(el); });
   } else {
-    animated.forEach(function (el) { el.classList.add('visible'); });
+    animated.forEach(function (el) {
+      el.classList.add('visible');
+      el.querySelectorAll('.card, .step, .pricing-card').forEach(function (c) { c.classList.add('visible'); });
+    });
   }
 
   // --- Contact form --------------------------------------------------------
