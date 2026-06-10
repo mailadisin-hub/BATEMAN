@@ -1,0 +1,38 @@
+<%- include('../partials/dashboard-head', { title: 'Bateman Chat' }) %>
+<body class="dashboard-body" data-page="chat">
+  <meta name="csrf-token" content="<%= csrfToken %>">
+  <button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle navigation">&#9776;</button>
+  <%- include('../partials/dashboard-sidebar', { currentPage: 'chat' }) %>
+
+  <main class="main-content chat-layout">
+    <div class="offline-banner" id="offlineBanner" hidden>
+      Bateman is offline &mdash; check the home server.
+    </div>
+
+    <header class="page-header chat-header">
+      <div>
+        <h1>Bateman</h1>
+        <p class="page-sub"><span class="status-dot offline" id="chatStatusDot"></span> <span id="chatStatusLabel">Connecting&hellip;</span></p>
+      </div>
+      <button class="btn-small" id="clearChat">Clear chat</button>
+    </header>
+
+    <div class="chat-messages" id="chatMessages">
+      <div class="chat-empty" id="chatEmpty">
+        <p class="chat-empty-mark">B</p>
+        <p>Ask Bateman anything &mdash; pipeline, leads, outreach, or what happened overnight.</p>
+      </div>
+    </div>
+
+    <form class="chat-input-bar" id="chatForm" autocomplete="off">
+      <textarea id="chatInput" rows="1" placeholder="Message Bateman&hellip;" aria-label="Message Bateman"></textarea>
+      <button type="submit" class="chat-send" id="chatSend" aria-label="Send">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+      </button>
+    </form>
+  </main>
+
+  <script src="/js/dashboard.js"></script>
+  <script src="/js/chat.js"></script>
+</body>
+</html>

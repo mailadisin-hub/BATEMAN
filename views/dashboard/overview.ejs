@@ -1,0 +1,139 @@
+<%- include('../partials/dashboard-head', { title: 'Overview' }) %>
+<body class="dashboard-body" data-page="overview">
+  <meta name="csrf-token" content="<%= csrfToken %>">
+  <button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle navigation">&#9776;</button>
+  <%- include('../partials/dashboard-sidebar', { currentPage: 'overview' }) %>
+
+  <main class="main-content">
+    <header class="page-header">
+      <h1>Overview</h1>
+      <p class="page-sub">The state of the operation, at a glance.</p>
+    </header>
+
+    <!-- Status bar -->
+    <div class="status-bar" id="statusBar">
+      <div class="status-item">
+        <span class="status-dot offline" id="batemanDot"></span>
+        <span id="batemanStatus">Checking Bateman&hellip;</span>
+      </div>
+      <div class="status-item"><span class="status-label">Model</span> <span id="batemanModel">&mdash;</span></div>
+      <div class="status-item"><span class="status-label">Memories</span> <span id="batemanMemories">&mdash;</span></div>
+      <div class="status-item"><span class="status-label">GPU</span> <span id="batemanGpu">&mdash;</span></div>
+      <div class="status-item"><span class="status-label">Night Bateman</span> <span id="nightBateman">&mdash;</span></div>
+    </div>
+
+    <!-- Metric cards -->
+    <div class="metric-grid">
+      <div class="metric-card">
+        <div class="metric-value">&pound;<%= Number(metrics.pipelineValue).toLocaleString('en-GB') %></div>
+        <div class="metric-label">Pipeline Value</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-value">&pound;<%= Number(metrics.revenue).toLocaleString('en-GB') %></div>
+        <div class="metric-label">Revenue (Closed Won)</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-value"><%= metrics.outreachSent %></div>
+        <div class="metric-label">Outreach Sent</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-value">&pound;<%= Number(metrics.mrr).toLocaleString('en-GB') %></div>
+        <div class="metric-label">MRR (<%= metrics.activeClients %> active clients)</div>
+      </div>
+    </div>
+
+    <div class="overview-columns">
+      <!-- Morning brief -->
+      <section class="panel">
+        <div class="panel-header">
+          <h2>Morning Brief</h2>
+          <button class="btn-small" id="refreshBrief">Refresh</button>
+        </div>
+        <div class="panel-body" id="morningBrief">
+          <p class="muted">Fetching the latest brief from Bateman&hellip;</p>
+        </div>
+      </section>
+
+      <!-- Recent activity -->
+      <section class="panel">
+        <div class="panel-header">
+          <h2>Recent Activity</h2>
+        </div>
+        <div class="panel-body">
+          <% if (recentActivity.length === 0) { %>
+            <p class="muted">No activity yet. It'll appear here as leads come in and the pipeline moves.</p>
+          <% } else { %>
+            <ul class="activity-feed">
+              <% recentActivity.forEach(function(item) { %>
+                <li class="activity-item">
+                  <span class="activity-type type-<%= (item.type || 'INFO').toLowerCase() %>"><%= item.type %></span>
+                  <div class="activity-text">
+                    <strong><%= item.title %></strong>
+                    <% if (item.description) { %><p><%= item.description %></p><% } %>
+                    <time class="activity-time" datetime="<%= item.created_at %>"><%= item.created_at %></time>
+                  </div>
+                </li>
+              <% }) %>
+            </ul>
+          <% } %>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <script src="/js/dashboard.js"></script>
+  <script>
+    // Overview-specific: live Bateman status + morning brief
+    (function () {
+      async function loadStatus() {
+        try {
+          const res = await fetch('/api/status');
+          const data = await res.json();
+          const dot = document.getElementById('batemanDot');
+          const label = document.getElementById('batemanStatus');
+          if (data.online) {
+            dot.classList.remove('offline');
+            dot.classList.add('online');
+            label.textContent = 'Bateman online';
+            document.getElementById('batemanModel').textContent = data.model || 'qwen3';
+            document.getElementById('batemanMemories').textContent = data.memories ?? '—';
+            document.getElementById('batemanGpu').textContent = data.gpu != null ? data.gpu + '%' : '—';
+            document.getElementById('nightBateman').textContent = data.night_bateman || (data.nightBateman ?? '—');
+          } else {
+            dot.classList.remove('online');
+            dot.classList.add('offline');
+            label.textContent = 'Bateman offline';
+          }
+        } catch (e) {
+          document.getElementById('batemanStatus').textContent = 'Bateman offline';
+        }
+      }
+
+      async function loadBrief() {
+        const el = document.getElementById('morningBrief');
+        try {
+          const res = await fetch('/api/brief');
+          const data = await res.json();
+          if (data.online && data.brief) {
+            const text = typeof data.brief === 'string' ? data.brief : JSON.stringify(data.brief, null, 2);
+            el.innerHTML = '';
+            const p = document.createElement('p');
+            p.className = 'brief-text';
+            p.textContent = text;
+            el.appendChild(p);
+          } else {
+            el.innerHTML = '<p class="muted">Bateman is offline — the morning brief will load when the home server is reachable.</p>';
+          }
+        } catch (e) {
+          el.innerHTML = '<p class="muted">Could not load the brief right now.</p>';
+        }
+      }
+
+      document.getElementById('refreshBrief').addEventListener('click', loadBrief);
+      loadStatus();
+      loadBrief();
+      setInterval(loadStatus, 60000);
+    })();
+  </script>
+</body>
+</html>

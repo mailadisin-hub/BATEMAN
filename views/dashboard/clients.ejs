@@ -1,0 +1,123 @@
+<%- include('../partials/dashboard-head', { title: 'Clients' }) %>
+<body class="dashboard-body" data-page="clients">
+  <meta name="csrf-token" content="<%= csrfToken %>">
+  <button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle navigation">&#9776;</button>
+  <%- include('../partials/dashboard-sidebar', { currentPage: 'clients' }) %>
+
+  <main class="main-content">
+    <header class="page-header">
+      <div>
+        <h1>Clients</h1>
+        <p class="page-sub"><%= clients.length %> clients</p>
+      </div>
+      <button class="btn btn-primary" id="openAddModal">Add Client</button>
+    </header>
+
+    <div class="table-wrap">
+      <table class="data-table" id="clientsTable">
+        <thead>
+          <tr>
+            <th>Business</th>
+            <th>Contact</th>
+            <th>Package</th>
+            <th class="num">MRR</th>
+            <th>Site</th>
+            <th>Status</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <% if (clients.length === 0) { %>
+            <tr><td colspan="7" class="empty-row">No clients yet. They'll land here when pipeline entries close.</td></tr>
+          <% } %>
+          <% clients.forEach(function(c) { %>
+            <tr data-id="<%= c.id %>">
+              <td><strong><%= c.business_name %></strong></td>
+              <td>
+                <%= c.contact_name || '—' %>
+                <% if (c.contact_email) { %><br><span class="muted"><%= c.contact_email %></span><% } %>
+              </td>
+              <td><%= c.package || '—' %></td>
+              <td class="num">&pound;<%= Number(c.mrr).toLocaleString('en-GB') %></td>
+              <td>
+                <% if (c.website_url) { %>
+                  <a class="table-link" href="<%= c.website_url %>" target="_blank" rel="noopener"><%= c.website_url %></a>
+                <% } else { %>—<% } %>
+              </td>
+              <td>
+                <select class="status-select status-<%= c.status.toLowerCase() %>" data-id="<%= c.id %>" data-entity="clients">
+                  <% statuses.forEach(function(s) { %>
+                    <option value="<%= s %>" <%= c.status === s ? 'selected' : '' %>><%= s %></option>
+                  <% }) %>
+                </select>
+              </td>
+              <td><button class="btn-icon delete-row" data-id="<%= c.id %>" data-entity="clients" aria-label="Delete client">&times;</button></td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+  </main>
+
+  <!-- Add client modal -->
+  <div class="modal-backdrop" id="addModal" hidden>
+    <div class="modal">
+      <div class="modal-header">
+        <h2>Add Client</h2>
+        <button class="btn-icon" id="closeAddModal" aria-label="Close">&times;</button>
+      </div>
+      <form action="/dashboard/clients" method="POST">
+        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="cBusiness">Business Name *</label>
+            <input type="text" id="cBusiness" name="business_name" required maxlength="200">
+          </div>
+          <div class="form-group">
+            <label for="cContact">Contact Name</label>
+            <input type="text" id="cContact" name="contact_name" maxlength="200">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="cEmail">Contact Email</label>
+            <input type="email" id="cEmail" name="contact_email" maxlength="320">
+          </div>
+          <div class="form-group">
+            <label for="cPhone">Phone</label>
+            <input type="text" id="cPhone" name="contact_phone" maxlength="50">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="cUrl">Site URL</label>
+            <input type="url" id="cUrl" name="website_url" maxlength="500" placeholder="https://">
+          </div>
+          <div class="form-group">
+            <label for="cPackage">Package</label>
+            <input type="text" id="cPackage" name="package" maxlength="100" placeholder="e.g. Growth + Care Plus">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="cMrr">MRR (&pound;)</label>
+            <input type="number" id="cMrr" name="mrr" min="0" step="1" value="0">
+          </div>
+          <div class="form-group">
+            <label for="cStart">Start Date</label>
+            <input type="date" id="cStart" name="start_date">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="cNotes">Notes</label>
+          <textarea id="cNotes" name="notes" rows="3" maxlength="2000"></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary btn-block">Add Client</button>
+      </form>
+    </div>
+  </div>
+
+  <script src="/js/dashboard.js"></script>
+  <script src="/js/pipeline.js"></script>
+</body>
+</html>

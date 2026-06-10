@@ -1,0 +1,162 @@
+<%- include('../partials/dashboard-head', { title: 'Settings' }) %>
+<body class="dashboard-body" data-page="settings">
+  <meta name="csrf-token" content="<%= csrfToken %>">
+  <button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle navigation">&#9776;</button>
+  <%- include('../partials/dashboard-sidebar', { currentPage: 'settings' }) %>
+
+  <main class="main-content">
+    <header class="page-header">
+      <h1>Settings</h1>
+      <p class="page-sub">Account, Bateman, pricing and brand configuration.</p>
+    </header>
+
+    <% if (saved) { %>
+      <div class="notice-card success">Settings saved.</div>
+    <% } %>
+
+    <div class="tabs" id="settingsTabs">
+      <button class="tab active" data-tab="account">Account</button>
+      <button class="tab" data-tab="bateman">Bateman</button>
+      <button class="tab" data-tab="pricing">Pricing</button>
+      <button class="tab" data-tab="dne">DNE List</button>
+      <button class="tab" data-tab="brand">Brand</button>
+    </div>
+
+    <!-- ============================== ACCOUNT -->
+    <section class="tab-panel" id="tab-account">
+      <div class="panel">
+        <div class="panel-header"><h2>Change Password</h2></div>
+        <div class="panel-body">
+          <p class="muted">
+            The admin password lives as a bcrypt hash in <code>.env</code>. This form verifies your
+            current password and generates the new hash for you to paste into
+            <code>ADMIN_PASSWORD_HASH</code>, then restart the app.
+          </p>
+          <form id="passwordForm" class="settings-form">
+            <div class="form-group">
+              <label for="currentPassword">Current Password</label>
+              <input type="password" id="currentPassword" name="current_password" required autocomplete="current-password">
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="newPassword">New Password (min 10 chars)</label>
+                <input type="password" id="newPassword" name="new_password" required minlength="10" autocomplete="new-password">
+              </div>
+              <div class="form-group">
+                <label for="confirmPassword">Confirm New Password</label>
+                <input type="password" id="confirmPassword" name="confirm_password" required autocomplete="new-password">
+              </div>
+            </div>
+            <div class="form-feedback" id="passwordFeedback"></div>
+            <pre class="hash-output" id="hashOutput" hidden></pre>
+            <button type="submit" class="btn btn-primary">Generate New Hash</button>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================== BATEMAN -->
+    <section class="tab-panel" id="tab-bateman" hidden>
+      <div class="panel">
+        <div class="panel-header"><h2>Bateman Configuration</h2></div>
+        <div class="panel-body">
+          <div class="form-group">
+            <label>Tunnel URL (BATEMAN_API_URL)</label>
+            <input type="text" value="<%= batemanApiUrl %>" readonly class="readonly-input">
+            <p class="muted small">Set in <code>.env</code> on the server. See BATEMAN_TUNNEL.md for setup.</p>
+          </div>
+          <form method="POST" action="/dashboard/settings" class="settings-form">
+            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+            <div class="form-group">
+              <label for="batemanModel">Model</label>
+              <input type="text" id="batemanModel" name="bateman_model" value="<%= settings.bateman_model || 'qwen3' %>" maxlength="100">
+              <p class="muted small">Display only for now &mdash; the model is selected on the Alienware.</p>
+            </div>
+            <button type="submit" class="btn btn-primary">Save</button>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================== PRICING -->
+    <section class="tab-panel" id="tab-pricing" hidden>
+      <div class="panel">
+        <div class="panel-header"><h2>Pricing Tiers</h2></div>
+        <div class="panel-body">
+          <p class="muted">Edit the pricing structure as JSON. This drives the tiers shown on the public site (after redeploy/re-render wiring).</p>
+          <form method="POST" action="/dashboard/settings" class="settings-form" id="pricingForm">
+            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+            <div class="form-group">
+              <textarea name="pricing_tiers" id="pricingJson" rows="18" class="code-textarea"><%= settings.pricing_tiers || '{}' %></textarea>
+            </div>
+            <div class="form-feedback" id="pricingFeedback"></div>
+            <button type="submit" class="btn btn-primary">Save Pricing</button>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================== DNE -->
+    <section class="tab-panel" id="tab-dne" hidden>
+      <div class="panel">
+        <div class="panel-header"><h2>Do Not Email List</h2></div>
+        <div class="panel-body">
+          <p class="muted">Permanent. Addresses here are never contacted by outreach, ever.</p>
+          <form id="dneForm" class="dne-add-form">
+            <input type="email" id="dneEmail" placeholder="email@example.com" required>
+            <input type="text" id="dneReason" placeholder="Reason (optional)" maxlength="500">
+            <button type="submit" class="btn btn-primary">Add</button>
+          </form>
+          <div class="table-wrap">
+            <table class="data-table" id="dneTable">
+              <thead>
+                <tr><th>Email</th><th>Domain</th><th>Reason</th><th>Added</th><th></th></tr>
+              </thead>
+              <tbody>
+                <% if (dneList.length === 0) { %>
+                  <tr><td colspan="5" class="empty-row">The DNE list is empty.</td></tr>
+                <% } %>
+                <% dneList.forEach(function(d) { %>
+                  <tr data-id="<%= d.id %>">
+                    <td><strong><%= d.email %></strong></td>
+                    <td><%= d.domain || '—' %></td>
+                    <td><%= d.reason || '—' %></td>
+                    <td><span class="muted"><%= d.added_at ? String(d.added_at).substring(0, 16) : '—' %></span></td>
+                    <td><button class="btn-icon dne-delete" data-id="<%= d.id %>" aria-label="Remove">&times;</button></td>
+                  </tr>
+                <% }) %>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================== BRAND -->
+    <section class="tab-panel" id="tab-brand" hidden>
+      <div class="panel">
+        <div class="panel-header"><h2>Brand Settings</h2></div>
+        <div class="panel-body">
+          <form method="POST" action="/dashboard/settings" class="settings-form">
+            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+            <div class="form-row">
+              <div class="form-group">
+                <label for="brandName">Brand Name</label>
+                <input type="text" id="brandName" name="brand_name" value="<%= settings.brand_name || 'Trendzation' %>" maxlength="100">
+              </div>
+              <div class="form-group">
+                <label for="brandTagline">Tagline</label>
+                <input type="text" id="brandTagline" name="brand_tagline" value="<%= settings.brand_tagline || 'We work while you sleep.' %>" maxlength="200">
+              </div>
+            </div>
+            <button type="submit" class="btn btn-primary">Save Brand</button>
+          </form>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="/js/dashboard.js"></script>
+  <script src="/js/settings.js"></script>
+</body>
+</html>
