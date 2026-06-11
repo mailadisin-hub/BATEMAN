@@ -823,3 +823,90 @@ h1, h2, h3, h4 { font-weight: 700; line-height: 1.2; letter-spacing: -.015em; }
   .hero-cta { flex-direction: column; }
   .hero-cta .btn { width: 100%; text-align: center; }
 }
+
+/* ==========================================================================
+   Scroll progress bar
+   ========================================================================== */
+#scrollProgress {
+  position: fixed;
+  top: 0; left: 0;
+  width: 0%;
+  height: 2px;
+  z-index: 9999;
+  background: linear-gradient(90deg, var(--accent) 0%, #a8bfe8 55%, var(--silver) 100%);
+  box-shadow: 0 0 8px var(--accent), 0 0 20px rgba(107,140,206,.55);
+  pointer-events: none;
+  transition: width .08s linear;
+}
+
+/* ==========================================================================
+   Hero scanline sweep
+   ========================================================================== */
+.hero-scanline {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg,
+    transparent 0%,
+    rgba(107,140,206,.15) 15%,
+    rgba(168,191,232,.75) 50%,
+    rgba(107,140,206,.15) 85%,
+    transparent 100%);
+  box-shadow: 0 0 18px 4px rgba(107,140,206,.22);
+  z-index: 2;
+  pointer-events: none;
+  animation: scan-hero 12s ease-in-out infinite;
+  animation-delay: 1.5s;
+}
+@keyframes scan-hero {
+  0%   { top: 0%;   opacity: 0; }
+  4%   { opacity: 1; }
+  92%  { opacity: .5; }
+  100% { top: 100%; opacity: 0; }
+}
+
+/* ==========================================================================
+   Beam dividers between sections
+   ========================================================================== */
+.beam-divider {
+  position: relative;
+  width: 100%;
+  height: 2px;
+  overflow: visible;
+}
+.beam-divider::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg,
+    transparent 0%,
+    var(--border) 12%,
+    rgba(107,140,206,.18) 50%,
+    var(--border) 88%,
+    transparent 100%);
+}
+.beam-dot {
+  position: absolute;
+  top: 50%; left: -15%;
+  transform: translateY(-50%);
+  width: 160px;
+  height: 2px;
+  border-radius: 2px;
+  background: linear-gradient(90deg,
+    transparent 0%,
+    var(--accent) 30%,
+    #c4d8ff 60%,
+    transparent 100%);
+  box-shadow: 0 0 12px 4px var(--accent), 0 0 28px 10px rgba(107,140,206,.3);
+  opacity: 0;
+  pointer-events: none;
+}
+.beam-dot.fire {
+  animation: beam-travel 1.8s cubic-bezier(.4,0,.2,1) forwards;
+}
+@keyframes beam-travel {
+  0%   { left: -15%; opacity: 0; }
+  7%   { opacity: 1; }
+  93%  { opacity: 1; }
+  100% { left: 115%; opacity: 0; }
+}

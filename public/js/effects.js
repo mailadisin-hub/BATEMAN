@@ -340,4 +340,38 @@
       });
     });
   })();
+
+  /* ========================================================================
+     6. Scroll progress bar
+     ======================================================================== */
+  (function initScrollProgress() {
+    var bar = document.getElementById('scrollProgress');
+    if (!bar) return;
+    function update() {
+      var scrolled = window.scrollY;
+      var total = document.documentElement.scrollHeight - window.innerHeight;
+      bar.style.width = (total > 0 ? Math.min(100, (scrolled / total) * 100) : 0) + '%';
+    }
+    window.addEventListener('scroll', update, { passive: true });
+    update();
+  })();
+
+  /* ========================================================================
+     7. Beam divider traveling dots
+     ======================================================================== */
+  (function initBeamDividers() {
+    if (reducedMotion) return;
+    var dots = document.querySelectorAll('.beam-dot');
+    if (!dots.length || !('IntersectionObserver' in window)) return;
+    var obs = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (!entry.isIntersecting) return;
+        var dot = entry.target;
+        dot.classList.remove('fire');
+        void dot.offsetWidth;
+        dot.classList.add('fire');
+      });
+    }, { threshold: 0.5 });
+    dots.forEach(function (d) { obs.observe(d); });
+  })();
 })();

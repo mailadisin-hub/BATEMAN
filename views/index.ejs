@@ -1,6 +1,7 @@
 <%- include('partials/head', { title: title }) %>
 <body>
   <meta name="csrf-token" content="<%= csrfToken %>">
+  <div id="scrollProgress" aria-hidden="true"></div>
 
   <!-- ====================================================== NAV -->
   <nav class="site-nav" id="siteNav">
@@ -24,6 +25,7 @@
   <header class="hero">
     <canvas id="heroCanvas" aria-hidden="true"></canvas>
     <div class="aurora" aria-hidden="true"><span></span><span></span><span></span></div>
+    <div class="hero-scanline" aria-hidden="true"></div>
 
     <div class="hero-inner" data-animate>
       <p class="hero-eyebrow">Autonomous Web Design</p>
@@ -42,6 +44,7 @@
       <span></span><span></span><span></span>
     </a>
   </header>
+  <div class="beam-divider" aria-hidden="true"><span class="beam-dot"></span></div>
 
   <!-- ====================================================== PROBLEM -->
   <section class="section" id="problem">
@@ -71,6 +74,7 @@
       </div>
     </div>
   </section>
+  <div class="beam-divider" aria-hidden="true"><span class="beam-dot"></span></div>
 
   <!-- ====================================================== SERVICES -->
   <section class="section section-alt" id="services">
@@ -107,6 +111,7 @@
       </div>
     </div>
   </section>
+  <div class="beam-divider" aria-hidden="true"><span class="beam-dot"></span></div>
 
   <!-- ====================================================== HOW IT WORKS -->
   <section class="section" id="how">
@@ -137,6 +142,7 @@
       </div>
     </div>
   </section>
+  <div class="beam-divider" aria-hidden="true"><span class="beam-dot"></span></div>
 
   <!-- ====================================================== PRICING -->
   <section class="section section-alt" id="pricing">
@@ -244,6 +250,7 @@
       </div>
     </div>
   </section>
+  <div class="beam-divider" aria-hidden="true"><span class="beam-dot"></span></div>
 
   <!-- ====================================================== SOCIAL PROOF -->
   <section class="section" id="testimonials">
@@ -275,6 +282,7 @@
       </div>
     </div>
   </section>
+  <div class="beam-divider" aria-hidden="true"><span class="beam-dot"></span></div>
 
   <!-- ====================================================== GUARANTEE -->
   <section class="section section-guarantee">
@@ -288,6 +296,7 @@
       </p>
     </div>
   </section>
+  <div class="beam-divider" aria-hidden="true"><span class="beam-dot"></span></div>
 
   <!-- ====================================================== CONTACT -->
   <section class="section section-alt" id="contact">
