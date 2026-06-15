@@ -11,7 +11,10 @@ const db = require('../db/database');
 // ---------------------------------------------------------------------------
 router.get('/', (req, res) => {
   res.render('index', {
-    title: 'Autonomous Web Design — We Work While You Sleep',
+    title: 'Web Design Swindon | AI-Built Websites for Local Businesses',
+    metaDescription: 'Trendzation builds premium websites for Swindon businesses — restaurants, tradesmen, shops and more. AI-powered design, fast turnaround. See your website before you pay a penny.',
+    canonical: 'https://trendzation.co.uk/',
+    noindex: false,
   });
 });
 
