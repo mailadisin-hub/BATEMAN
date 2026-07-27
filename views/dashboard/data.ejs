@@ -1,0 +1,126 @@
+<%- include('../partials/dashboard-head', { title: 'Data' }) %>
+<body class="dashboard-body" data-page="data">
+  <meta name="csrf-token" content="<%= csrfToken %>">
+  <button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle navigation">&#9776;</button>
+  <%- include('../partials/dashboard-sidebar', { currentPage: 'data' }) %>
+
+  <main class="main-content">
+    <header class="page-header">
+      <div>
+        <h1>Data</h1>
+        <p class="page-sub">Everything Bateman has gathered &mdash; market scans, lead sources, raw intel.</p>
+      </div>
+    </header>
+
+    <!-- Search / filters -->
+    <form class="filter-bar" method="GET" action="/dashboard/data">
+      <input type="search" name="q" placeholder="Search business, website or email&hellip;" value="<%= filters.q %>" class="filter-search">
+      <select name="industry">
+        <option value="">All industries</option>
+        <% filterOptions.industries.forEach(function(i) { %>
+          <option value="<%= i %>" <%= filters.industry === i ? 'selected' : '' %>><%= i %></option>
+        <% }) %>
+      </select>
+      <select name="location">
+        <option value="">All locations</option>
+        <% filterOptions.locations.forEach(function(l) { %>
+          <option value="<%= l %>" <%= filters.location === l ? 'selected' : '' %>><%= l %></option>
+        <% }) %>
+      </select>
+      <select name="source">
+        <option value="">All sources</option>
+        <% filterOptions.sources.forEach(function(s) { %>
+          <option value="<%= s %>" <%= filters.source === s ? 'selected' : '' %>><%= s %></option>
+        <% }) %>
+      </select>
+      <button type="submit" class="btn btn-primary">Filter</button>
+      <a href="/dashboard/data" class="btn btn-ghost">Reset</a>
+    </form>
+
+    <!-- Tabs -->
+    <div class="tabs" id="dataTabs">
+      <button class="tab active" data-tab="market">Market Data (<%= marketData.length %>)</button>
+      <button class="tab" data-tab="leads">Leads (<%= leads.length %>)</button>
+    </div>
+
+    <div class="tab-panel" id="tab-market">
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Business</th>
+              <th>Website</th>
+              <th>Industry</th>
+              <th>Location</th>
+              <th>Email</th>
+              <th class="num">Score</th>
+              <th>Collected</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% if (marketData.length === 0) { %>
+              <tr><td colspan="7" class="empty-row">No market data yet. Bateman's scanner results will appear here.</td></tr>
+            <% } %>
+            <% marketData.forEach(function(m) { %>
+              <tr>
+                <td><strong><%= m.business_name || '—' %></strong></td>
+                <td><% if (m.website) { %><a class="table-link" href="<%= m.website %>" target="_blank" rel="noopener"><%= m.website %></a><% } else { %>—<% } %></td>
+                <td><%= m.industry || '—' %></td>
+                <td><%= m.location || '—' %></td>
+                <td><%= m.email || '—' %></td>
+                <td class="num"><%= m.score != null ? m.score : '—' %></td>
+                <td><span class="muted"><%= m.collected_at ? String(m.collected_at).substring(0, 16) : '—' %></span></td>
+              </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="tab-panel" id="tab-leads" hidden>
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Business</th>
+              <th>Email</th>
+              <th>Source</th>
+              <th>Status</th>
+              <th>Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% if (leads.length === 0) { %>
+              <tr><td colspan="6" class="empty-row">No leads yet. Contact form submissions will appear here.</td></tr>
+            <% } %>
+            <% leads.forEach(function(l) { %>
+              <tr>
+                <td><strong><%= l.name || '—' %></strong></td>
+                <td><%= l.business_name || '—' %></td>
+                <td><%= l.email || '—' %></td>
+                <td><%= l.source || '—' %></td>
+                <td><span class="badge badge-<%= (l.status || 'NEW').toLowerCase() %>"><%= l.status %></span></td>
+                <td><span class="muted"><%= l.created_at ? String(l.created_at).substring(0, 16) : '—' %></span></td>
+              </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+
+  <script src="/js/dashboard.js"></script>
+  <script>
+    // Tab switching for the data browser
+    document.querySelectorAll('#dataTabs .tab').forEach(function (tab) {
+      tab.addEventListener('click', function () {
+        document.querySelectorAll('#dataTabs .tab').forEach(function (t) { t.classList.remove('active'); });
+        tab.classList.add('active');
+        document.getElementById('tab-market').hidden = tab.dataset.tab !== 'market';
+        document.getElementById('tab-leads').hidden = tab.dataset.tab !== 'leads';
+      });
+    });
+  </script>
+</body>
+</html>

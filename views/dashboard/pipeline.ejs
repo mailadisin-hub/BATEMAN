@@ -1,0 +1,132 @@
+<%- include('../partials/dashboard-head', { title: 'Pipeline' }) %>
+<body class="dashboard-body" data-page="pipeline">
+  <meta name="csrf-token" content="<%= csrfToken %>">
+  <button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle navigation">&#9776;</button>
+  <%- include('../partials/dashboard-sidebar', { currentPage: 'pipeline' }) %>
+
+  <main class="main-content">
+    <header class="page-header">
+      <div>
+        <h1>Pipeline</h1>
+        <p class="page-sub"><%= pipeline.length %> entries</p>
+      </div>
+      <button class="btn btn-primary" id="openAddModal">Add Entry</button>
+    </header>
+
+    <div class="table-wrap">
+      <table class="data-table" id="pipelineTable">
+        <thead>
+          <tr>
+            <th data-sort="business_name">Business</th>
+            <th data-sort="contact_name">Contact</th>
+            <th data-sort="status">Status</th>
+            <th data-sort="value" class="num">Value</th>
+            <th data-sort="last_action">Last Action</th>
+            <th data-sort="last_action_at">When</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <% if (pipeline.length === 0) { %>
+            <tr><td colspan="7" class="empty-row">No pipeline entries yet. Add your first one.</td></tr>
+          <% } %>
+          <% pipeline.forEach(function(p) { %>
+            <tr data-id="<%= p.id %>"
+                data-business_name="<%= p.business_name %>"
+                data-contact_name="<%= p.contact_name %>"
+                data-status="<%= p.status %>"
+                data-value="<%= p.value %>"
+                data-last_action="<%= p.last_action || '' %>"
+                data-last_action_at="<%= p.last_action_at || '' %>">
+              <td>
+                <strong><%= p.business_name %></strong>
+                <% if (p.website) { %><br><a class="table-link" href="<%= p.website %>" target="_blank" rel="noopener"><%= p.website %></a><% } %>
+              </td>
+              <td>
+                <%= p.contact_name || '—' %>
+                <% if (p.contact_email) { %><br><span class="muted"><%= p.contact_email %></span><% } %>
+              </td>
+              <td>
+                <select class="status-select status-<%= p.status.toLowerCase() %>" data-id="<%= p.id %>">
+                  <% statuses.forEach(function(s) { %>
+                    <option value="<%= s %>" <%= p.status === s ? 'selected' : '' %>><%= s.replace('_', ' ') %></option>
+                  <% }) %>
+                </select>
+              </td>
+              <td class="num">&pound;<%= Number(p.value).toLocaleString('en-GB') %></td>
+              <td><%= p.last_action || '—' %></td>
+              <td><span class="muted"><%= p.last_action_at ? String(p.last_action_at).substring(0, 16) : '—' %></span></td>
+              <td><button class="btn-icon delete-row" data-id="<%= p.id %>" aria-label="Delete entry">&times;</button></td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+  </main>
+
+  <!-- Add entry modal -->
+  <div class="modal-backdrop" id="addModal" hidden>
+    <div class="modal">
+      <div class="modal-header">
+        <h2>Add Pipeline Entry</h2>
+        <button class="btn-icon" id="closeAddModal" aria-label="Close">&times;</button>
+      </div>
+      <form id="addPipelineForm" action="/dashboard/pipeline" method="POST">
+        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="pBusiness">Business Name *</label>
+            <input type="text" id="pBusiness" name="business_name" required maxlength="200">
+          </div>
+          <div class="form-group">
+            <label for="pContact">Contact Name</label>
+            <input type="text" id="pContact" name="contact_name" maxlength="200">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="pEmail">Contact Email</label>
+            <input type="email" id="pEmail" name="contact_email" maxlength="320">
+          </div>
+          <div class="form-group">
+            <label for="pPhone">Phone</label>
+            <input type="text" id="pPhone" name="contact_phone" maxlength="50">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="pWebsite">Website</label>
+            <input type="url" id="pWebsite" name="website" maxlength="500" placeholder="https://">
+          </div>
+          <div class="form-group">
+            <label for="pStatus">Status</label>
+            <select id="pStatus" name="status">
+              <% statuses.forEach(function(s) { %>
+                <option value="<%= s %>"><%= s.replace('_', ' ') %></option>
+              <% }) %>
+            </select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="pValue">Value (&pound;)</label>
+            <input type="number" id="pValue" name="value" min="0" step="1" value="0">
+          </div>
+          <div class="form-group">
+            <label for="pPackage">Package</label>
+            <input type="text" id="pPackage" name="package" maxlength="100" placeholder="e.g. Growth">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="pNotes">Notes</label>
+          <textarea id="pNotes" name="notes" rows="3" maxlength="2000"></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary btn-block">Add Entry</button>
+      </form>
+    </div>
+  </div>
+
+  <script src="/js/dashboard.js"></script>
+  <script src="/js/pipeline.js"></script>
+</body>
+</html>

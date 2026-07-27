@@ -1,0 +1,309 @@
+<%- include('partials/head', { title: title }) %>
+<body>
+  <meta name="csrf-token" content="<%= csrfToken %>">
+  <div id="scrollProgress" aria-hidden="true"></div>
+
+  <!-- ====================================================== NAV -->
+  <nav class="site-nav" id="siteNav">
+    <div class="nav-inner">
+      <a href="/" class="nav-logo">TRENDZATION</a>
+      <button class="nav-hamburger" id="navHamburger" aria-label="Toggle menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+      <div class="nav-links" id="navLinks">
+        <a href="#problem">The Problem</a>
+        <a href="#services">What We Do</a>
+        <a href="#how">How It Works</a>
+        <a href="#pricing">Pricing</a>
+        <a href="#contact">Contact</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ====================================================== HERO -->
+  <header class="hero">
+    <canvas id="heroCanvas" aria-hidden="true"></canvas>
+    <div class="aurora" aria-hidden="true"><span></span><span></span><span></span></div>
+    <div class="hero-scanline" aria-hidden="true"></div>
+
+    <div class="hero-inner" data-animate>
+      <p class="hero-eyebrow">Autonomous Web Design</p>
+      <h1>Your website is your hardest&#8209;working employee.<br><span class="accent" id="scrambleText">Does yours work nights?</span></h1>
+      <p class="hero-sub">
+        Trendzation designs, builds and delivers premium websites for small businesses —
+        autonomously, around the clock. While your competitors sleep, we're already building.
+      </p>
+      <div class="hero-cta">
+        <a href="#contact" class="btn btn-primary">Get Your Free Website Assessment</a>
+        <a href="#how" class="btn btn-ghost">See how it works</a>
+      </div>
+      <p class="hero-tagline">We work while you sleep.</p>
+    </div>
+    <a href="#problem" class="hero-scroll" aria-label="Scroll down">
+      <span></span><span></span><span></span>
+    </a>
+  </header>
+  <div class="beam-divider" aria-hidden="true"><span class="beam-dot"></span></div>
+
+  <!-- ====================================================== PROBLEM -->
+  <section class="section" id="problem">
+    <div class="section-inner" data-animate>
+      <p class="section-eyebrow">The Problem</p>
+      <h2>Most small businesses are invisible online.</h2>
+      <p class="section-lead">
+        Customers check you out online before they ever pick up the phone. If your website is
+        outdated — or worse, doesn't exist — they quietly move on to a competitor who looks the part.
+      </p>
+      <div class="card-grid three">
+        <div class="card">
+          <div class="card-stat" data-count="75" data-suffix="%">75%</div>
+          <h3>Judge you by your website</h3>
+          <p>Three in four customers judge a business's credibility on its website design alone.</p>
+        </div>
+        <div class="card">
+          <div class="card-stat" data-count="88" data-suffix="%">88%</div>
+          <h3>Don't come back</h3>
+          <p>Nearly nine in ten visitors won't return to a site after a bad experience. One chance is all you get.</p>
+        </div>
+        <div class="card">
+          <div class="card-stat" data-count="0.05" data-decimals="2" data-suffix="s">0.05s</div>
+          <h3>To make an impression</h3>
+          <p>Visitors form an opinion about your business in a fraction of a second. Outdated design costs you instantly.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+  <div class="beam-divider" aria-hidden="true"><span class="beam-dot"></span></div>
+
+  <!-- ====================================================== SERVICES -->
+  <section class="section section-alt" id="services">
+    <div class="section-inner" data-animate>
+      <p class="section-eyebrow">What We Do</p>
+      <h2>Autonomous web design. Found, built and delivered — fast.</h2>
+      <p class="section-lead">
+        We don't wait for a brief. Our systems research your business, your market and your
+        competitors, then design and build a premium website tailored to you — often before
+        you've even spoken to us.
+      </p>
+      <div class="card-grid three">
+        <div class="card">
+          <div class="card-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          </div>
+          <h3>Research &amp; Identify</h3>
+          <p>We study your business, your customers and your local market to understand exactly what your website needs to do.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+          </div>
+          <h3>Design &amp; Build</h3>
+          <p>A premium, mobile-first website built to modern standards — designed to earn trust and convert visitors into customers.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="M12 15l-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/></svg>
+          </div>
+          <h3>Launch &amp; Maintain</h3>
+          <p>We handle launch, hosting and ongoing care, so your site stays fast, secure and current — without you lifting a finger.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+  <div class="beam-divider" aria-hidden="true"><span class="beam-dot"></span></div>
+
+  <!-- ====================================================== HOW IT WORKS -->
+  <section class="section" id="how">
+    <div class="section-inner" data-animate>
+      <p class="section-eyebrow">How It Works</p>
+      <h2>Four steps. Most of them are ours.</h2>
+      <div class="steps">
+        <div class="step">
+          <div class="step-number">1</div>
+          <h3>We find you</h3>
+          <p>Our systems identify businesses whose online presence is holding them back — that's probably how we found you.</p>
+        </div>
+        <div class="step">
+          <div class="step-number">2</div>
+          <h3>We build first</h3>
+          <p>Before asking for anything, we design and build a premium website concept for your business.</p>
+        </div>
+        <div class="step">
+          <div class="step-number">3</div>
+          <h3>You see it live</h3>
+          <p>We present the finished concept. You see exactly what you'd be getting — no mock-ups, no imagination required.</p>
+        </div>
+        <div class="step">
+          <div class="step-number">4</div>
+          <h3>You launch</h3>
+          <p>Love it? We launch it on your domain and can handle everything ongoing. Not for you? No obligation, no hard feelings.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+  <div class="beam-divider" aria-hidden="true"><span class="beam-dot"></span></div>
+
+  <!-- ====================================================== PRICING -->
+  <section class="section section-alt" id="pricing">
+    <div class="section-inner" data-animate>
+      <p class="section-eyebrow">Pricing</p>
+      <h2>Clear tiers. No surprises.</h2>
+      <p class="section-lead">Every tier is a complete, finished website. Higher tiers add depth, capability and reach.</p>
+
+      <div class="pricing-grid">
+        <div class="pricing-card">
+          <h3>Essential</h3>
+          <div class="pricing-price">Free</div>
+          <p class="pricing-desc">A clean single-page presence to get your business online.</p>
+          <ul>
+            <li>Single-page website</li>
+            <li>Mobile responsive</li>
+            <li>Contact details &amp; map</li>
+          </ul>
+          <a href="#contact" class="btn btn-ghost btn-block">Start here</a>
+        </div>
+        <div class="pricing-card">
+          <h3>Starter</h3>
+          <div class="pricing-price">&pound;149</div>
+          <p class="pricing-desc">A focused site for businesses ready to look professional.</p>
+          <ul>
+            <li>Up to 3 pages</li>
+            <li>Contact form</li>
+            <li>Basic SEO setup</li>
+            <li>1 revision round</li>
+          </ul>
+          <a href="#contact" class="btn btn-ghost btn-block">Choose Starter</a>
+        </div>
+        <div class="pricing-card popular">
+          <div class="pricing-badge">Most chosen</div>
+          <h3>Growth</h3>
+          <div class="pricing-price">&pound;299</div>
+          <p class="pricing-desc">The full professional presence most businesses need.</p>
+          <ul>
+            <li>Up to 6 pages</li>
+            <li>Premium custom design</li>
+            <li>Advanced SEO</li>
+            <li>Google Business integration</li>
+            <li>2 revision rounds</li>
+          </ul>
+          <a href="#contact" class="btn btn-primary btn-block">Choose Growth</a>
+        </div>
+        <div class="pricing-card">
+          <h3>Professional</h3>
+          <div class="pricing-price">&pound;499</div>
+          <p class="pricing-desc">For businesses that want to lead their local market.</p>
+          <ul>
+            <li>Up to 10 pages</li>
+            <li>Bespoke design system</li>
+            <li>Copywriting included</li>
+            <li>Booking &amp; enquiry systems</li>
+            <li>3 revision rounds</li>
+          </ul>
+          <a href="#contact" class="btn btn-ghost btn-block">Choose Professional</a>
+        </div>
+        <div class="pricing-card">
+          <h3>Flagship</h3>
+          <div class="pricing-price">&pound;799</div>
+          <p class="pricing-desc">The complete digital flagship, built end to end.</p>
+          <ul>
+            <li>Unlimited pages</li>
+            <li>E-commerce ready</li>
+            <li>Custom integrations</li>
+            <li>Priority delivery</li>
+            <li>Unlimited revisions</li>
+          </ul>
+          <a href="#contact" class="btn btn-ghost btn-block">Choose Flagship</a>
+        </div>
+      </div>
+
+      <h3 class="maintenance-heading">Ongoing care</h3>
+      <div class="maintenance-grid">
+        <div class="maintenance-card">
+          <h4>Care</h4>
+          <div class="maintenance-price">&pound;29<span>/mo</span></div>
+          <ul>
+            <li>Hosting management</li>
+            <li>Security updates</li>
+            <li>Monthly backup</li>
+          </ul>
+        </div>
+        <div class="maintenance-card">
+          <h4>Care Plus</h4>
+          <div class="maintenance-price">&pound;49<span>/mo</span></div>
+          <ul>
+            <li>Everything in Care</li>
+            <li>Monthly content updates</li>
+            <li>Performance monitoring</li>
+          </ul>
+        </div>
+        <div class="maintenance-card">
+          <h4>Concierge</h4>
+          <div class="maintenance-price">&pound;79<span>/mo</span></div>
+          <ul>
+            <li>Everything in Care Plus</li>
+            <li>Priority same-day support</li>
+            <li>SEO monitoring &amp; reporting</li>
+            <li>Quarterly strategy review</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+  <div class="beam-divider" aria-hidden="true"><span class="beam-dot"></span></div>
+
+  <!-- ====================================================== GUARANTEE -->
+  <section class="section section-guarantee">
+    <div class="section-inner narrow" data-animate>
+      <p class="section-eyebrow">Our Guarantee</p>
+      <h2>You see the finished website before you pay a penny.</h2>
+      <p class="section-lead">
+        We build first and present second. If the site we've built for you isn't something
+        you're proud to put your name on, you walk away owing nothing. When you do go ahead,
+        we keep refining until it's right.
+      </p>
+    </div>
+  </section>
+  <div class="beam-divider" aria-hidden="true"><span class="beam-dot"></span></div>
+
+  <!-- ====================================================== CONTACT -->
+  <section class="section section-alt" id="contact">
+    <div class="section-inner narrow" data-animate>
+      <p class="section-eyebrow">Get Started</p>
+      <h2>Get your free website assessment</h2>
+      <p class="section-lead">
+        Tell us about your business. We'll review your current online presence and come back
+        with an honest assessment — and often, a finished concept.
+      </p>
+
+      <form id="contactForm" class="contact-form" action="/contact" method="POST" novalidate>
+        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="name">Your Name</label>
+            <input type="text" id="name" name="name" required maxlength="200" placeholder="Jane Smith">
+          </div>
+          <div class="form-group">
+            <label for="business_name">Business Name</label>
+            <input type="text" id="business_name" name="business_name" required maxlength="200" placeholder="Smith &amp; Co.">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="email">Business Email</label>
+          <input type="email" id="email" name="email" required maxlength="320" placeholder="jane@smithandco.co.uk">
+        </div>
+        <div class="form-group">
+          <label for="message">Message</label>
+          <textarea id="message" name="message" rows="5" maxlength="2000" placeholder="Tell us a little about your business and what you need..."></textarea>
+        </div>
+        <div class="form-feedback" id="formFeedback" role="status" aria-live="polite"></div>
+        <button type="submit" class="btn btn-primary btn-block" id="contactSubmit">Send Message</button>
+      </form>
+    </div>
+  </section>
+
+  <%- include('partials/footer') %>
+
+  <script src="/js/main.js"></script>
+  <script src="/js/effects.js"></script>
+</body>
+</html>

@@ -1,0 +1,44 @@
+<%- include('../partials/dashboard-head', { title: 'Analytics' }) %>
+<body class="dashboard-body" data-page="analytics">
+  <meta name="csrf-token" content="<%= csrfToken %>">
+  <button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle navigation">&#9776;</button>
+  <%- include('../partials/dashboard-sidebar', { currentPage: 'analytics' }) %>
+
+  <main class="main-content">
+    <header class="page-header">
+      <div>
+        <h1>Analytics</h1>
+        <p class="page-sub">Website performance across managed client sites.</p>
+      </div>
+      <select id="clientSelector" class="client-selector">
+        <option value="all">All clients</option>
+        <% clients.forEach(function(c) { %>
+          <option value="<%= c.id %>"><%= c.business_name %></option>
+        <% }) %>
+      </select>
+    </header>
+
+    <div class="notice-card">
+      Connect Google Analytics or Plausible in <a href="/dashboard/settings">Settings</a> to populate these charts with real data.
+    </div>
+
+    <div class="chart-grid">
+      <section class="panel chart-panel">
+        <div class="panel-header"><h2>Visitors</h2><span class="muted" id="visitorsTotal">&mdash;</span></div>
+        <div class="chart-container" id="chart-visitors"></div>
+      </section>
+      <section class="panel chart-panel">
+        <div class="panel-header"><h2>Page Views</h2><span class="muted" id="pageviewsTotal">&mdash;</span></div>
+        <div class="chart-container" id="chart-pageviews"></div>
+      </section>
+      <section class="panel chart-panel">
+        <div class="panel-header"><h2>Conversions</h2><span class="muted" id="conversionsTotal">&mdash;</span></div>
+        <div class="chart-container" id="chart-conversions"></div>
+      </section>
+    </div>
+  </main>
+
+  <script src="/js/dashboard.js"></script>
+  <script src="/js/analytics.js"></script>
+</body>
+</html>

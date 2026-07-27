@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <%
+    var _title   = (typeof title !== 'undefined' && title)            ? title            : 'Trendzation';
+    var _desc    = (typeof metaDescription !== 'undefined' && metaDescription) ? metaDescription : 'Trendzation — autonomous web design for small businesses in Swindon. We work while you sleep.';
+    var _canon   = (typeof canonical !== 'undefined' && canonical)    ? canonical        : 'https://trendzation.co.uk/';
+    var _noindex = (typeof noindex !== 'undefined')                   ? noindex          : true;
+    var _isHome  = (_canon === 'https://trendzation.co.uk/');
+  %>
+
+  <title><%= _title %> | Trendzation</title>
+  <meta name="description" content="<%= _desc %>">
+  <% if (_noindex) { %><meta name="robots" content="noindex, nofollow"><% } else { %>
+  <meta name="robots" content="index, follow">
+  <meta name="keywords" content="web design Swindon, website designer Swindon, small business website Swindon, affordable web design Swindon, AI web design UK, web developer Swindon, website builder Swindon, Wiltshire web design, cheap website Swindon, professional website design">
+  <link rel="canonical" href="<%= _canon %>">
+  <% } %>
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="<%= _canon %>">
+  <meta property="og:title" content="<%= _title %> | Trendzation">
+  <meta property="og:description" content="<%= _desc %>">
+  <meta property="og:site_name" content="Trendzation">
+  <meta property="og:locale" content="en_GB">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="<%= _title %> | Trendzation">
+  <meta name="twitter:description" content="<%= _desc %>">
+
+  <% if (_isHome) { %>
+  <!-- JSON-LD Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "ProfessionalService",
+        "@id": "https://trendzation.co.uk/#business",
+        "name": "Trendzation",
+        "url": "https://trendzation.co.uk",
+        "description": "AI-powered web design for small businesses in Swindon and across the UK. We design, build and deliver premium websites autonomously — restaurants, tradesmen, retail, salons, professional services and more.",
+        "areaServed": [
+          { "@type": "City", "name": "Swindon" },
+          { "@type": "AdministrativeArea", "name": "Wiltshire" },
+          { "@type": "Country", "name": "United Kingdom" }
+        ],
+        "address": {
+          "@type": "PostalAddress",
+          "addressLocality": "Swindon",
+          "addressRegion": "Wiltshire",
+          "addressCountry": "GB"
+        },
+        "priceRange": "£0–£799",
+        "hasOfferCatalog": {
+          "@type": "OfferCatalog",
+          "name": "Web Design Packages",
+          "itemListElement": [
+            { "@type": "Offer", "name": "Essential Website", "price": "0",   "priceCurrency": "GBP", "description": "Single-page website to get your business online" },
+            { "@type": "Offer", "name": "Starter Website",   "price": "149", "priceCurrency": "GBP", "description": "Up to 3 pages, contact form, basic SEO" },
+            { "@type": "Offer", "name": "Growth Website",    "price": "299", "priceCurrency": "GBP", "description": "Up to 6 pages, premium design, advanced SEO" },
+            { "@type": "Offer", "name": "Professional Website", "price": "499", "priceCurrency": "GBP", "description": "Up to 10 pages, bespoke design, copywriting included" },
+            { "@type": "Offer", "name": "Flagship Website",  "price": "799", "priceCurrency": "GBP", "description": "Unlimited pages, e-commerce ready, custom integrations" }
+          ]
+        }
+      },
+      {
+        "@type": "WebSite",
+        "@id": "https://trendzation.co.uk/#website",
+        "url": "https://trendzation.co.uk",
+        "name": "Trendzation",
+        "description": "AI-powered web design for Swindon businesses",
+        "publisher": { "@id": "https://trendzation.co.uk/#business" }
+      },
+      {
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "How much does a website cost in Swindon?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Trendzation offers websites starting completely free, with paid tiers at £149, £299, £499 and £799 depending on size and features. All prices are one-off with no hidden fees."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "How long does it take to build a website?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Our AI systems work autonomously around the clock, so we often deliver a finished website concept within days — not weeks."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Do I have to pay before seeing my website?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "No. We build your website first and present the finished concept to you. You only pay if you love it. No upfront cost, no obligation."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "What kinds of businesses do you build websites for?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "We build websites for all types of small businesses in Swindon — including restaurants, cafés, tradesmen, plumbers, electricians, builders, salons, retail shops, solicitors, accountants, and more."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Do you offer website maintenance in Swindon?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes. Our ongoing care plans start at £29/month and cover hosting, security updates, backups and content changes."
+            }
+          }
+        ]
+      }
+    ]
+  }
+  </script>
+  <% } %>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/main.css">
+</head>
